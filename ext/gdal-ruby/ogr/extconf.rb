@@ -1,6 +1,5 @@
 require 'mkmf'
-
-raise 'gdal-config not found.' if `which gdal-config`.empty?
+require_relative '../../mkmf_pkg_config_monkeypatch.rb'
 
 raise 'gdal-config not found.' if `which gdal-config`.empty?
 
@@ -13,5 +12,8 @@ have_library 'gdal' or raise 'libgdal not found'
 pkg_config 'gdal'
 
 $libs = append_library $libs, 'gdal'
+
+$CFLAGS << ' -Wno-format-security'
+$CXXFLAGS << ' -Wno-format-security'
 
 create_makefile('gdal-ruby/ogr')
